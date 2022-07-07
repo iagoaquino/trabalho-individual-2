@@ -11,7 +11,6 @@ using namespace std;
 unsigned int id = 0;
 int largura = 0,altura = 0,canais = 0;
 void carregar_textura(){
-
     stbi_set_flip_vertically_on_load(true);
     unsigned char* entrada = stbi_load("textura.jpg",&largura,&altura,&canais,3);
     if(!entrada){

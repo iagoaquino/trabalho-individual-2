@@ -15,6 +15,7 @@ glm::vec3 ambiente(0.4,0.4,0.4);
 glm::vec3 difusa(0.2,0.2,0.2);
 glm::vec3 especular(0.4,0.4,0.4);
 float expoente = 2;
+Objeto* obj;
 float produto_escalar(glm::vec3 v1,glm::vec3 v2){
     float x = v1.x*v2.x;
     float y = v1.y*v2.y;
@@ -27,7 +28,12 @@ glm::vec3 aplicar_luz(glm::vec3 normal,glm::vec3 pos,glm::vec3 cor_objeto){
     glm::vec3 rf = 2 * glm::dot(lp,normal)*normal -lp;
     glm::vec3 ambiente_final = ambiente * cor_objeto;
     glm::vec3 difusa_final = (difusa * cor_objeto) * produto_escalar(normal,lp);
-    glm::vec3 especular_final = (especular * cor_objeto) * pow(produto_escalar(vw,rf),expoente);
+    glm::vec3 especular_final;
+    if(produto_escalar(vw,rf) < 0){
+        especular_final = glm::vec3(0,0,0);
+    }else{
+        especular_final = (especular * cor_objeto) * pow(produto_escalar(vw,rf),expoente);
+    }
     glm::vec3 resultado_final = ambiente_final+difusa_final+especular_final;
     return resultado_final;
 }
@@ -71,11 +77,27 @@ void inicializar(){
     glEnable(GL_TEXTURE_2D);
     glClearColor(0.5,0.5,0.5,1);
     glPointSize(10);
-    ler_arquivo();
-    glLineWidth(3);
+    obj = ler_arquivo();
+    glLineWidth(5);
     criarTabuleiro();
     //mostrarTabuleiro();
     carregar_textura();
+}
+void desenhar_obj(){
+    glTranslatef(2,2,0);
+    glBegin(GL_TRIANGLES);
+        for(int i = 0;i < obj->quant_lados;i++){
+           glm::vec3 cor1 = aplicar_luz(obj->pontos[obj->faces[i].id_ponto_1 - 1].normal,obj->pontos[obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.1,0.1,0.1));
+           glColor3f(cor1.x,cor1.y,cor1.z);
+           glVertex3f(obj->pontos[obj->faces[i].id_ponto_1-1].coord.x,obj->pontos[obj->faces[i].id_ponto_1-1].coord.y,obj->pontos[obj->faces[i].id_ponto_1-1].coord.z);
+           glm::vec3 cor2 = aplicar_luz(obj->pontos[obj->faces[i].id_ponto_2 - 1].normal,obj->pontos[obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0,0,1));
+           glColor3f(cor2.x,cor2.y,cor2.z);
+           glVertex3f(obj->pontos[obj->faces[i].id_ponto_2-1].coord.x,obj->pontos[obj->faces[i].id_ponto_2-1].coord.y,obj->pontos[obj->faces[i].id_ponto_2-1].coord.z);
+           glm::vec3 cor3 = aplicar_luz(obj->pontos[obj->faces[i].id_ponto_3 - 1].normal,obj->pontos[obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0,0,1));
+           glColor3f(cor3.x,cor3.y,cor3.z);
+           glVertex3f(obj->pontos[obj->faces[i].id_ponto_3-1].coord.x,obj->pontos[obj->faces[i].id_ponto_3-1].coord.y,obj->pontos[obj->faces[i].id_ponto_3-1].coord.z);
+        }
+    glEnd();
 }
 void desenharTabuleiro(){
     for(int i = 0;i<64;i++){
@@ -120,6 +142,7 @@ void desenhar3D(){
         glVertex3f(0,0,20);
     glEnd();
     desenharTabuleiro();
+    desenhar_obj();
     glFlush();
 }
 int main(int argc,char** argv){

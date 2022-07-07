@@ -3,14 +3,17 @@
 
 #ifndef OBJETO_H
 #define OBJETO_H
-typedef struct normal{
-    glm::vec3 normal;
-}Normal;
 typedef struct ponto{
     glm::vec3 coord;
+    glm::vec3 normal;
 }Ponto;
+typedef struct face{
+    int id_ponto_1,id_ponto_2,id_ponto_3;
+}Face;
 typedef struct objeto{
-    struct ponto[100000];
+    struct face faces[50000];
+    int quant_lados;
+    struct ponto pontos[100000];
     int quant_ponto;
 }Objeto;
 
