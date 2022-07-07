@@ -5,8 +5,31 @@
 #include<tabuleiro.h>
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
+#include "textura.cpp"
 using namespace std;
 Quadrado tabuleiro[64];
+glm::vec3 pos_camera(15,15,15);
+glm::vec3 pos_luz(0,0,15);
+glm::vec3 ambiente(0.4,0.4,0.4);
+glm::vec3 difusa(0.2,0.2,0.2);
+glm::vec3 especular(0.4,0.4,0.4);
+float expoente = 2;
+float produto_escalar(glm::vec3 v1,glm::vec3 v2){
+    float x = v1.x*v2.x;
+    float y = v1.y*v2.y;
+    float z = v1.z*v2.z;
+    return x+y+z;
+}
+glm::vec3 aplicar_luz(glm::vec3 normal,glm::vec3 pos,glm::vec3 cor_objeto){
+    glm::vec3 lp = normalize(pos_luz-pos);
+    glm::vec3 vw = normalize(pos_camera-pos);
+    glm::vec3 rf = 2 * glm::dot(lp,normal)*normal -lp;
+    glm::vec3 ambiente_final = ambiente * cor_objeto;
+    glm::vec3 difusa_final = (difusa * cor_objeto) * produto_escalar(normal,lp);
+    glm::vec3 especular_final = (especular * cor_objeto) * pow(produto_escalar(vw,rf),expoente);
+    glm::vec3 resultado_final = ambiente_final+difusa_final+especular_final;
+    return resultado_final;
+}
 void criarTabuleiro(){
     int x = 1, y = 1,z = 0,pos = 0,cont = 0;
     for(int i = 0; i < 8 ;i++){
@@ -44,21 +67,32 @@ void mostrarTabuleiro(){
     }
 }
 void inicializar(){
+    glEnable(GL_TEXTURE_2D);
     glClearColor(0.5,0.5,0.5,1);
     glPointSize(10);
     glLineWidth(3);
     criarTabuleiro();
     //mostrarTabuleiro();
+    carregar_textura();
 }
 void desenharTabuleiro(){
     for(int i = 0;i<64;i++){
         glBegin(GL_QUADS);
-        glColor3fv(tabuleiro[i].color);
+            cout<<tabuleiro[i].color[0]<<", "<<tabuleiro[i].color[1]<<", "<<tabuleiro[i].color[2]<<endl;
+            glm::vec3 cor1 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
+            glColor3f(cor1.x,cor1.y,cor1.z);
             glVertex3f(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z);
+            glm::vec3 cor2 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
+            glColor3f(cor2.x,cor2.y,cor2.z);
             glVertex3f(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z);
+            glm::vec3 cor3 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
+            glColor3f(cor3.x,cor3.y,cor3.z);
             glVertex3f(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z);
+            glm::vec3 cor4 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
+            glColor3f(cor4.x,cor4.y,cor4.z);
             glVertex3f(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z);
         glEnd();
+        glBindTexture(GL_TEXTURE_2D, 0);
     }
 }
 void desenhar3D(){
@@ -67,12 +101,7 @@ void desenhar3D(){
     glLoadIdentity();
     gluPerspective(90,1,1,40);
     glMatrixMode(GL_MODELVIEW);
-
-    glBegin(GL_POINTS);
-        glColor3f(1,0,0);
-        glVertex3f(0,0,0);
-    glEnd();
-    glm::mat4 camera = glm::lookAt(glm::vec3(15,15,15),
+    glm::mat4 camera = glm::lookAt(pos_camera,
                                    glm::vec3(0,0,0),
                                    glm::vec3(0,0,1));
     glLoadMatrixf(glm::value_ptr(camera));
