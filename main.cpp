@@ -3,6 +3,7 @@
 #include<GL\glut.h>
 #include<math.h>
 #include<tabuleiro.h>
+#include"leitura.h"
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 #include "textura.cpp"
@@ -70,6 +71,7 @@ void inicializar(){
     glEnable(GL_TEXTURE_2D);
     glClearColor(0.5,0.5,0.5,1);
     glPointSize(10);
+    ler_arquivo();
     glLineWidth(3);
     criarTabuleiro();
     //mostrarTabuleiro();
@@ -78,7 +80,6 @@ void inicializar(){
 void desenharTabuleiro(){
     for(int i = 0;i<64;i++){
         glBegin(GL_QUADS);
-            cout<<tabuleiro[i].color[0]<<", "<<tabuleiro[i].color[1]<<", "<<tabuleiro[i].color[2]<<endl;
             glm::vec3 cor1 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
             glColor3f(cor1.x,cor1.y,cor1.z);
             glVertex3f(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z);
