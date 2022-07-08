@@ -9,10 +9,10 @@
 #include "textura.cpp"
 using namespace std;
 Quadrado tabuleiro[64];
-glm::vec3 pos_camera(15,15,15);
+glm::vec3 pos_camera(10,10,10);
 glm::vec3 pos_luz(0,0,15);
-glm::vec3 ambiente(0.4,0.4,0.4);
-glm::vec3 difusa(0.2,0.2,0.2);
+glm::vec3 ambiente(0.2,0.2,0.2);
+glm::vec3 difusa(0.9,0.9,0.9);
 glm::vec3 especular(0.4,0.4,0.4);
 float expoente = 2;
 Objeto* obj;
@@ -26,13 +26,13 @@ glm::vec3 aplicar_luz(glm::vec3 normal,glm::vec3 pos,glm::vec3 cor_objeto){
     glm::vec3 lp = normalize(pos_luz-pos);
     glm::vec3 vw = normalize(pos_camera-pos);
     glm::vec3 rf = 2 * glm::dot(lp,normal)*normal -lp;
-    glm::vec3 ambiente_final = ambiente * cor_objeto;
+    glm::vec3 ambiente_final = ambiente * glm::vec3(0.5,0.5,0.5);
     glm::vec3 difusa_final = (difusa * cor_objeto) * produto_escalar(normal,lp);
     glm::vec3 especular_final;
     if(produto_escalar(vw,rf) < 0){
         especular_final = glm::vec3(0,0,0);
     }else{
-        especular_final = (especular * cor_objeto) * pow(produto_escalar(vw,rf),expoente);
+        especular_final = (especular * glm::vec3(0.5,0.5,0.5)) * pow(produto_escalar(vw,rf),expoente);
     }
     glm::vec3 resultado_final = ambiente_final+difusa_final+especular_final;
     return resultado_final;
@@ -100,23 +100,28 @@ void desenhar_obj(){
     glEnd();
 }
 void desenharTabuleiro(){
+    glBindTexture(GL_TEXTURE_2D,id);
     for(int i = 0;i<64;i++){
         glBegin(GL_QUADS);
             glm::vec3 cor1 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
             glColor3f(cor1.x,cor1.y,cor1.z);
+            glTexCoord2f(0,1);
             glVertex3f(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z);
             glm::vec3 cor2 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
             glColor3f(cor2.x,cor2.y,cor2.z);
+            glTexCoord2f(1,1);
             glVertex3f(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z);
             glm::vec3 cor3 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
             glColor3f(cor3.x,cor3.y,cor3.z);
+            glTexCoord2f(1,0);
             glVertex3f(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z);
             glm::vec3 cor4 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
             glColor3f(cor4.x,cor4.y,cor4.z);
+            glTexCoord2f(0,0);
             glVertex3f(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z);
         glEnd();
-        glBindTexture(GL_TEXTURE_2D, 0);
     }
+    glBindTexture(GL_TEXTURE_2D, 0);
 }
 void desenhar3D(){
     glClear(GL_COLOR_BUFFER_BIT);

@@ -9,8 +9,13 @@
 using namespace std;
 
 unsigned int id = 0;
+
+
 int largura = 0,altura = 0,canais = 0;
 void carregar_textura(){
+    //gerar textura
+    glGenTextures(1,&id);
+    glBindTexture(GL_TEXTURE_2D,id);
     stbi_set_flip_vertically_on_load(true);
     unsigned char* entrada = stbi_load("textura.jpg",&largura,&altura,&canais,3);
     if(!entrada){
@@ -18,12 +23,8 @@ void carregar_textura(){
     }else{
         cout<<"arquivo carregado com sucesso"<<endl;
     }
-    //gerar textura
-
-    glGenTextures(1,&id);
     //configurar textura
-    glBindTexture(GL_TEXTURE_2D,id);
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE,GL_REPLACE);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
