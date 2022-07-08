@@ -5,10 +5,10 @@ CONFIG -= qt
 QT   += core gui opengl
 LIBS += -lopengl32 -lfreeglut -lglu32
 SOURCES += \
+        leitura.cpp \
         main.cpp \
         textura.cpp
 
 HEADERS += \
-    leitura.h \
     objeto.h \
     tabuleiro.h

@@ -3,19 +3,19 @@
 #include<GL\glut.h>
 #include<math.h>
 #include<tabuleiro.h>
-#include"leitura.h"
+#include"leitura.cpp"
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 #include "textura.cpp"
 using namespace std;
 Quadrado tabuleiro[64];
-glm::vec3 pos_camera(10,10,10);
-glm::vec3 pos_luz(0,0,15);
-glm::vec3 ambiente(0.2,0.2,0.2);
-glm::vec3 difusa(0.9,0.9,0.9);
-glm::vec3 especular(0.4,0.4,0.4);
-float expoente = 2;
-Objeto* obj;
+glm::vec3 pos_camera(5,0,2);
+glm::vec3 pos_luz(0,10,0);
+glm::vec3 ambiente(0.5,0.5,0.5);
+glm::vec3 difusa(0.6,0.6,0.6);
+glm::vec3 especular(1.0,1.0,1.0);
+float expoente = 12;
+Objeto* torre;
 float produto_escalar(glm::vec3 v1,glm::vec3 v2){
     float x = v1.x*v2.x;
     float y = v1.y*v2.y;
@@ -26,14 +26,17 @@ glm::vec3 aplicar_luz(glm::vec3 normal,glm::vec3 pos,glm::vec3 cor_objeto){
     glm::vec3 lp = normalize(pos_luz-pos);
     glm::vec3 vw = normalize(pos_camera-pos);
     glm::vec3 rf = 2 * glm::dot(lp,normal)*normal -lp;
-    glm::vec3 ambiente_final = ambiente * glm::vec3(0.5,0.5,0.5);
+    glm::vec3 ambiente_final = ambiente * glm::vec3(0.1,0.1,0.1);
     glm::vec3 difusa_final = (difusa * cor_objeto) * produto_escalar(normal,lp);
-    glm::vec3 especular_final;
+    glm::vec3 especular_final = (especular * glm::vec3(0.9,0.9,0.9)) * pow(produto_escalar(vw,rf),expoente);
+    /*
     if(produto_escalar(vw,rf) < 0){
+        cout<<"escurece";
         especular_final = glm::vec3(0,0,0);
     }else{
-        especular_final = (especular * glm::vec3(0.5,0.5,0.5)) * pow(produto_escalar(vw,rf),expoente);
+        especular_final = (especular * glm::vec3(0.9,0.9,0.9)) * pow(produto_escalar(vw,rf),expoente);
     }
+    */
     glm::vec3 resultado_final = ambiente_final+difusa_final+especular_final;
     return resultado_final;
 }
@@ -75,27 +78,28 @@ void mostrarTabuleiro(){
 }
 void inicializar(){
     glEnable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);
     glClearColor(0.5,0.5,0.5,1);
     glPointSize(10);
-    obj = ler_arquivo();
+    torre = ler_arquivo("pawn3.obj");
     glLineWidth(5);
     criarTabuleiro();
     //mostrarTabuleiro();
     carregar_textura();
 }
-void desenhar_obj(){
-    glTranslatef(2,2,0);
+void desenhar_torre(){
+    glScalef(2,2,2);
     glBegin(GL_TRIANGLES);
-        for(int i = 0;i < obj->quant_lados;i++){
-           glm::vec3 cor1 = aplicar_luz(obj->pontos[obj->faces[i].id_ponto_1 - 1].normal,obj->pontos[obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.1,0.1,0.1));
+        for(int i = 0;i < torre->quant_lados;i++){
+           glm::vec3 cor1 = aplicar_luz(torre->pontos[torre->faces[i].id_ponto_1 - 1].normal,torre->pontos[torre->faces[i].id_ponto_1 - 1].coord,glm::vec3(0,0,0));
            glColor3f(cor1.x,cor1.y,cor1.z);
-           glVertex3f(obj->pontos[obj->faces[i].id_ponto_1-1].coord.x,obj->pontos[obj->faces[i].id_ponto_1-1].coord.y,obj->pontos[obj->faces[i].id_ponto_1-1].coord.z);
-           glm::vec3 cor2 = aplicar_luz(obj->pontos[obj->faces[i].id_ponto_2 - 1].normal,obj->pontos[obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0,0,1));
+           glVertex3f(torre->pontos[torre->faces[i].id_ponto_1-1].coord.x,torre->pontos[torre->faces[i].id_ponto_1-1].coord.y,torre->pontos[torre->faces[i].id_ponto_1-1].coord.z);
+           glm::vec3 cor2 = aplicar_luz(torre->pontos[torre->faces[i].id_ponto_2 - 1].normal,torre->pontos[torre->faces[i].id_ponto_2 - 1].coord,glm::vec3(0,0,0));
            glColor3f(cor2.x,cor2.y,cor2.z);
-           glVertex3f(obj->pontos[obj->faces[i].id_ponto_2-1].coord.x,obj->pontos[obj->faces[i].id_ponto_2-1].coord.y,obj->pontos[obj->faces[i].id_ponto_2-1].coord.z);
-           glm::vec3 cor3 = aplicar_luz(obj->pontos[obj->faces[i].id_ponto_3 - 1].normal,obj->pontos[obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0,0,1));
+           glVertex3f(torre->pontos[torre->faces[i].id_ponto_2-1].coord.x,torre->pontos[torre->faces[i].id_ponto_2-1].coord.y,torre->pontos[torre->faces[i].id_ponto_2-1].coord.z);
+           glm::vec3 cor3 = aplicar_luz(torre->pontos[torre->faces[i].id_ponto_3 - 1].normal,torre->pontos[torre->faces[i].id_ponto_3 - 1].coord,glm::vec3(0,0,0));
            glColor3f(cor3.x,cor3.y,cor3.z);
-           glVertex3f(obj->pontos[obj->faces[i].id_ponto_3-1].coord.x,obj->pontos[obj->faces[i].id_ponto_3-1].coord.y,obj->pontos[obj->faces[i].id_ponto_3-1].coord.z);
+           glVertex3f(torre->pontos[torre->faces[i].id_ponto_3-1].coord.x,torre->pontos[torre->faces[i].id_ponto_3-1].coord.y,torre->pontos[torre->faces[i].id_ponto_3-1].coord.z);
         }
     glEnd();
 }
@@ -124,7 +128,7 @@ void desenharTabuleiro(){
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 void desenhar3D(){
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(90,1,1,40);
@@ -147,7 +151,7 @@ void desenhar3D(){
         glVertex3f(0,0,20);
     glEnd();
     desenharTabuleiro();
-    desenhar_obj();
+    desenhar_torre();
     glFlush();
 }
 int main(int argc,char** argv){
