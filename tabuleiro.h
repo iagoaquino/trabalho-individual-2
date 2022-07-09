@@ -5,5 +5,8 @@
 typedef struct quadrado{
     glm::vec3 pos;
     float color[3];
+    int situacao;
+    glm::vec2 peca_ocupada;
+    int jogador_ocupando;
 }Quadrado;
 #endif // TABULEIRO_H
