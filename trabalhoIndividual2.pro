@@ -5,10 +5,13 @@ CONFIG -= qt
 QT   += core gui opengl
 LIBS += -lopengl32 -lfreeglut -lglu32
 SOURCES += \
+        iniciar_jogo.cpp \
         leitura.cpp \
         main.cpp \
         textura.cpp
 
 HEADERS += \
+    ../trabalhoFinal/pecas.h \
     objeto.h \
+    pecas.h \
     tabuleiro.h
