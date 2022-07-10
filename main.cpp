@@ -14,24 +14,89 @@
 
 float w = 1200,h = 600;
 using namespace std;
-glm::vec3 pos_jogador_branco(29,9.5,15);
-glm::vec3 pos_jogador_preto(-12,7.5,15);
-glm::vec3 pos_camera(15,15,15);
-glm::vec3 pos_luz(0,0,0);
-glm::vec3 ambiente(0.5f,0.5f,0.5f);
-glm::vec3 difusa(0.9f,0.9f,0.9f);
-glm::vec3 especular(0.8f,0.8f,0.8f);
-float expoente = 1;
+glm::vec3 pos_jogador_branco(29,9.5,17);
+glm::vec3 pos_jogador_preto(-12,7.5,17);
+glm::vec3 pos_camera(-12,7.5,17);
+glm::vec3 look(0,0,0);
+glm::vec3 pos_luz(5,10,1);
+glm::vec3 ambiente(0.25f,0.25f,0.25f);
+glm::vec3 difusa(1.0f,1.0f,1.0f);
+glm::vec3 especular(0.5f,0.5f,0.5f);
+float expoente = 20;
 void movimento_animado(int v){
     glutTimerFunc(1000.0/FPS,movimento_animado,0);
     glutPostRedisplay();
     if(ativar == 1){
         if(peca.x == 6 && peca.y == 1){
             t+= 0.1;
-            movido->peoes->translate = ((1-t)*movido->peoes->translate)+(t * mov);
-        }
-        if(t == 1){
-            passar_turno();
+            movido->peoes[0].translate = ((1-t)*movido->peoes[0].translate)+(t * mov);
+            cout<<t<<endl;
+            if(t >= 1){
+                passar_turno();
+            }
+        }else if(peca.x == 6 && peca.y == 2){
+            t+= 0.1;
+            movido->peoes[1].translate = ((1-t)*movido->peoes[1].translate)+(t * mov);
+            cout<<t<<endl;
+            if(t >= 1){
+                passar_turno();
+            }
+        }else if(peca.x == 6 && peca.y == 3){
+            t+= 0.1;
+            movido->peoes[2].translate = ((1-t)*movido->peoes[2].translate)+(t * mov);
+            cout<<t<<endl;
+            if(t >= 1){
+                passar_turno();
+            }
+        }else if(peca.x == 6 && peca.y == 4){
+            t+= 0.1;
+            movido->peoes[3].translate = ((1-t)*movido->peoes[3].translate)+(t * mov);
+            cout<<t<<endl;
+            if(t >= 1){
+                passar_turno();
+            }
+        }else if(peca.x == 6 && peca.y == 5){
+            t+= 0.1;
+            movido->peoes[4].translate = ((1-t)*movido->peoes[4].translate)+(t * mov);
+            cout<<t<<endl;
+            if(t >= 1){
+                passar_turno();
+            }
+        }else if(peca.x == 6 && peca.y == 6){
+            t+= 0.1;
+            movido->peoes[5].translate = ((1-t)*movido->peoes[5].translate)+(t * mov);
+            cout<<t<<endl;
+            if(t >= 1){
+                passar_turno();
+            }
+        }else if(peca.x == 6 && peca.y == 7){
+            t+= 0.1;
+            movido->peoes[6].translate = ((1-t)*movido->peoes[6].translate)+(t * mov);
+            cout<<t<<endl;
+            if(t >= 1){
+                passar_turno();
+            }
+        }else if(peca.x == 6 && peca.y == 8){
+            t+= 0.1;
+            movido->peoes[7].translate = ((1-t)*movido->peoes[7].translate)+(t * mov);
+            cout<<t<<endl;
+            if(t >= 1){
+                passar_turno();
+            }
+        }else if(peca.x == 7 && peca.y == 1){
+            t+= 0.1;
+            pos_camera = (1-t)*pos_jogador_preto + (t*pos_jogador_branco);
+            if(t >= 1){
+                ativar = 0;
+                t = 0;
+            }
+        }else if(peca.x == 7 && peca.y == 2){
+            t+= 0.1;
+            pos_camera = (1-t)*pos_jogador_branco + (t*pos_jogador_preto);
+            if(t >= 1){
+                ativar = 0;
+                t = 0;
+            }
         }
     }
 }
@@ -449,8 +514,13 @@ void desenhar(){
     gluPerspective(90,1,1,40);
     glMatrixMode(GL_MODELVIEW);
     glPushMatrix();
-    glm::mat4 camera = glm::lookAt(pos_jogador_preto,
-                                   glm::vec3(7,-2,4),
+    if(turno == 2){
+        look = glm::vec3(7,-2,4);
+    }else{
+        look = glm::vec3(9,18,4);
+    }
+    glm::mat4 camera = glm::lookAt(pos_camera,
+                                   look,
                                    glm::vec3(0,0,1));
     glLoadMatrixf(glm::value_ptr(camera));
     glBegin(GL_LINES);

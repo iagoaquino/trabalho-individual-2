@@ -21,13 +21,16 @@ int foiSelecionado = 0;
 Quadrado* possiveis[64];
 int quant_possivel = 0;
 void passar_turno(){
-    delete(movido);
-    ativar = 0;
-    t = 0;
-    if(turno = 2){
+    if(turno == 2){
         turno = 1;
+        ativar = 1;
+        t = 0;
+        peca = glm::vec2(7,1);
     }else{
         turno = 2;
+        ativar = 1;
+        t = 0;
+        peca = glm::vec2(7,2);
     }
 }
 void movimentar(float x, float y){
@@ -36,6 +39,84 @@ void movimentar(float x, float y){
             movido = &preto;
             mov = glm::vec3(x,y,0);
             peca = glm::vec2(6,1);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 2){
+            movido = &preto;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,2);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 3){
+            movido = &preto;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,3);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 4){
+            movido = &preto;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,4);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 5){
+            movido = &preto;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,5);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 6){
+            movido = &preto;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,6);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 7){
+            movido = &preto;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,7);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 8){
+            movido = &preto;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,8);
+            ativar = 1;
+        }
+    }
+    if(selecionado->jogador_ocupando == 1){
+        if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 1){
+            movido = &branco;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,1);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 2){
+            movido = &branco;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,2);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 3){
+            movido = &branco;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,3);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 4){
+            movido = &branco;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,4);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 5){
+            movido = &branco;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,5);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 6){
+            movido = &branco;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,6);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 7){
+            movido = &branco;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,7);
+            ativar = 1;
+        }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 8){
+            movido = &branco;
+            mov = glm::vec3(x,y,0);
+            peca = glm::vec2(6,8);
             ativar = 1;
         }
     }
