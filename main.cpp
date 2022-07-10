@@ -10,11 +10,8 @@
 #include "glm/ext.hpp"
 #include "textura.cpp"
 #include "pecas.h"
-#include "iniciar_jogo.cpp"
-Jogador branco;
-jogador preto;
-Quadrado selecionado;
-int foiSelecionado = 0;
+#include "entradas.cpp"
+
 float w = 1200,h = 600;
 using namespace std;
 glm::vec3 pos_jogador_branco(29,9.5,15);
@@ -25,11 +22,18 @@ glm::vec3 ambiente(0.5f,0.5f,0.5f);
 glm::vec3 difusa(0.9f,0.9f,0.9f);
 glm::vec3 especular(0.8f,0.8f,0.8f);
 float expoente = 1;
-float produto_escalar(glm::vec3 v1,glm::vec3 v2){
-    float x = v1.x*v2.x;
-    float y = v1.y*v2.y;
-    float z = v1.z*v2.z;
-    return x+y+z;
+void movimento_animado(int v){
+    glutTimerFunc(1000.0/FPS,movimento_animado,0);
+    glutPostRedisplay();
+    if(ativar == 1){
+        if(peca.x == 6 && peca.y == 1){
+            t+= 0.1;
+            movido->peoes->translate = ((1-t)*movido->peoes->translate)+(t * mov);
+        }
+        if(t == 1){
+            passar_turno();
+        }
+    }
 }
 glm::vec3 aplicar_luz(glm::vec3 normal,glm::vec3 pos,glm::vec3 cor_objeto){
     glm::vec3 lp = normalize(pos_luz-pos);
@@ -38,27 +42,13 @@ glm::vec3 aplicar_luz(glm::vec3 normal,glm::vec3 pos,glm::vec3 cor_objeto){
     glm::vec3 ambiente_final = ambiente * cor_objeto;
     glm::vec3 difusa_final = (difusa * cor_objeto) * glm::dot(normal,lp);
     glm::vec3 especular_final;
-    if(produto_escalar(vw,rf) < 0){
+    if(glm::dot(vw,rf) < 0){
         especular_final = glm::vec3(0.0f,0.0f,0.0f);
     }else{
         especular_final = especular * glm::vec3(0.9f,0.9f,0.9f) * (float)pow(glm::dot(vw,rf),expoente);
     }
     glm::vec3 resultado_final = ambiente_final+difusa_final+especular_final;
     return resultado_final;
-}
-bool checar_pontos_quadrado(float x_quadrado,float y_quadrado,float x_peca,float y_peca){
-    if(x_quadrado - 1.0 <= x_peca && x_quadrado + 1.0 >= x_peca && y_quadrado - 1.0 <= y_peca && y_quadrado + 1.0 >= y_peca){
-        return true;
-    }
-    return false;
-}
-Quadrado pegar_quadrado(float x,float y){
-    for(int i = 0;i < 64;i++){
-        if(checar_pontos_quadrado(tabuleiro[i].pos.x,tabuleiro[i].pos.y,x,y)){
-            foiSelecionado = 1;
-            return tabuleiro[i];
-        }
-    }
 }
 void criarTabuleiro(){
     int x = 1, y = 1,z = 0,pos = 0,cont = 0;
@@ -371,6 +361,7 @@ void desenhar_tabuleiro_2D(){
             }
         glEnd();
     }
+    glutPostRedisplay();
 }
 void desenhar_pecas(){
     int tipo;
@@ -396,7 +387,23 @@ void pegar_click(int button,int status, int x,int y){
     float xFinal = (float)(16*x)/(w/2);
     float yFinal = (float)(16*(h-y))/h;
     if(button == GLUT_LEFT_BUTTON && status == GLUT_UP){
-        selecionado = pegar_quadrado(xFinal,yFinal);
+        bool moveu;
+        if(foiSelecionado == 1){
+            moveu = selecionar_possivel(xFinal,yFinal);
+            if(!moveu){
+                cout<<"errou";
+                selecionado = pegar_quadrado(xFinal,yFinal);
+                quant_possivel = 0;
+                if(selecionado->situacao == 1){
+                    buscar_possiveis(selecionado);
+                }
+            }
+        }else if(foiSelecionado == 0){
+            selecionado = pegar_quadrado(xFinal,yFinal);
+            if(selecionado->situacao == 1){
+                buscar_possiveis(selecionado);
+            }
+        }
     }
  }
 void desenhar(){
@@ -408,13 +415,32 @@ void desenhar(){
     desenhar_tabuleiro_2D();
     if(foiSelecionado == 1){
         glLineWidth(5);
-        glBegin(GL_QUADS);
+        glBegin(GL_LINES);
             glColor3f(1,1,0.2);
-            glVertex2f(selecionado.pos.x-1,selecionado.pos.y+1);
-            glVertex2f(selecionado.pos.x+1,selecionado.pos.y+1);
-            glVertex2f(selecionado.pos.x+1,selecionado.pos.y-1);
-            glVertex2f(selecionado.pos.x-1,selecionado.pos.y-1);
+            glVertex2f(selecionado->pos.x-1,selecionado->pos.y+1);
+            glVertex2f(selecionado->pos.x+1,selecionado->pos.y+1);
+            glVertex2f(selecionado->pos.x+1,selecionado->pos.y+1);
+            glVertex2f(selecionado->pos.x+1,selecionado->pos.y-1);
+            glVertex2f(selecionado->pos.x+1,selecionado->pos.y-1);
+            glVertex2f(selecionado->pos.x-1,selecionado->pos.y-1);
+            glVertex2f(selecionado->pos.x-1,selecionado->pos.y-1);
+            glVertex2f(selecionado->pos.x-1,selecionado->pos.y+1);
         glEnd();
+    }
+    if(quant_possivel > 0){
+        for(int i = 0;i< quant_possivel;i++){
+            glBegin(GL_LINES);
+                glColor3f(1,1,0.2);
+                glVertex2f(possiveis[i]->pos.x-1,possiveis[i]->pos.y+1);
+                glVertex2f(possiveis[i]->pos.x+1,possiveis[i]->pos.y+1);
+                glVertex2f(possiveis[i]->pos.x+1,possiveis[i]->pos.y+1);
+                glVertex2f(possiveis[i]->pos.x+1,possiveis[i]->pos.y-1);
+                glVertex2f(possiveis[i]->pos.x+1,possiveis[i]->pos.y-1);
+                glVertex2f(possiveis[i]->pos.x-1,possiveis[i]->pos.y-1);
+                glVertex2f(possiveis[i]->pos.x-1,possiveis[i]->pos.y-1);
+                glVertex2f(possiveis[i]->pos.x-1,possiveis[i]->pos.y+1);
+            glEnd();
+        }
     }
     glViewport(w/2,0,w,h);
     glEnable(GL_DEPTH_TEST);
@@ -455,5 +481,6 @@ int main(int argc,char** argv){
     inicializar();
     glutDisplayFunc(desenhar);
     glutMouseFunc(pegar_click);
+    glutTimerFunc(1000/FPS,movimento_animado,0);
     glutMainLoop();
 }

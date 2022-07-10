@@ -38,4 +38,7 @@ typedef struct jogador{
     struct bispo bispos[2];
     struct cavalo cavalos[2];
 }Jogador;
+
+Jogador branco;
+jogador preto;
 #endif // PECAS_H

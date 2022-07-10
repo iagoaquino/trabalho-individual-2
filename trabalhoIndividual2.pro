@@ -5,6 +5,7 @@ CONFIG -= qt
 QT   += core gui opengl
 LIBS += -lopengl32 -lfreeglut -lglu32
 SOURCES += \
+        entradas.cpp \
         iniciar_jogo.cpp \
         leitura.cpp \
         main.cpp \

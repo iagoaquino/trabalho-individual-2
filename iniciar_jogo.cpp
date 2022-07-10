@@ -1,5 +1,8 @@
 #include<iostream>
 #include "objeto.h"
+#include <GL/gl.h>
+#include <GL/glext.h>
+#include<GL\glut.h>
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 #include "pecas.h"
@@ -160,35 +163,35 @@ void iniciar_2D(){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(1,1);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 1){
+        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 3){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(2,1);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 5 && tabuleiro[i].pos.y == 1){
+        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 5){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(3,1);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 7 && tabuleiro[i].pos.y == 1){
+        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 7){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(4,1);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 9 && tabuleiro[i].pos.y == 1){
+        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 9){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(5,1);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 11 && tabuleiro[i].pos.y == 1){
+        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 11){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(3,2);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 1){
+        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 13){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(2,2);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 1){
+        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 15){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(1,2);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 3){
+        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 1){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,1);
             tabuleiro[i].jogador_ocupando = 2;
@@ -196,55 +199,55 @@ void iniciar_2D(){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,2);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 5 && tabuleiro[i].pos.y == 3){
+        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 5){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,3);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 7 && tabuleiro[i].pos.y == 3){
+        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 7){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,4);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 9 && tabuleiro[i].pos.y == 3){
+        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 9){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,5);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 11 && tabuleiro[i].pos.y == 3){
+        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 11){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,6);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 3){
+        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 13){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,7);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 3){
+        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 15){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,8);
             tabuleiro[i].jogador_ocupando = 2;
-        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 15){
+        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 1){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(1,1);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 15){
+        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 3){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(2,1);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 5 && tabuleiro[i].pos.y == 15){
+        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 5){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(3,1);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 7 && tabuleiro[i].pos.y == 15){
+        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 7){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(4,1);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 9 && tabuleiro[i].pos.y == 15){
+        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 9){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(5,1);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 11 && tabuleiro[i].pos.y == 15){
+        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 11){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(3,2);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 15){
+        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 13){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(2,2);
             tabuleiro[i].jogador_ocupando = 1;
@@ -252,27 +255,27 @@ void iniciar_2D(){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(1,2);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 1 && tabuleiro[i].pos.y == 13){
+        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 1){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,1);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 3 && tabuleiro[i].pos.y == 13){
+        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 3){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,2);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 5 && tabuleiro[i].pos.y == 13){
+        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 5){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,3);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 7 && tabuleiro[i].pos.y == 13){
+        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 7){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,4);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 9 && tabuleiro[i].pos.y == 13){
+        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 9){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,5);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 11 && tabuleiro[i].pos.y == 13){
+        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 11){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,6);
             tabuleiro[i].jogador_ocupando = 1;
@@ -280,10 +283,18 @@ void iniciar_2D(){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,7);
             tabuleiro[i].jogador_ocupando = 1;
-        }else if(tabuleiro[i].pos.x == 15 && tabuleiro[i].pos.y == 13){
+        }else if(tabuleiro[i].pos.x == 13 && tabuleiro[i].pos.y == 15){
             tabuleiro[i].situacao = 1;
             tabuleiro[i].peca_ocupada = glm::vec2(6,8);
             tabuleiro[i].jogador_ocupando = 1;
+        }else{
+            tabuleiro[i].situacao = 0;
+            tabuleiro[i].peca_ocupada = glm::vec2(0,0);
+            tabuleiro[i].jogador_ocupando = 0;
         }
+    }
+    for(int i = 0;i<8;i++){
+       branco.peoes[i].turnos = 0;
+       preto.peoes[i].turnos = 0;
     }
 }
