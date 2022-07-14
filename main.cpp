@@ -636,7 +636,7 @@ void pegar_click(int button,int status, int x,int y){
     float xFinal = (float)(16*x)/(w/2);
     float yFinal = (float)(16*(h-y))/h;
 
-    if(button == GLUT_LEFT_BUTTON && status == GLUT_UP){
+    if(button == GLUT_LEFT_BUTTON && status == GLUT_UP && xFinal < 16){
         bool moveu;
         // Se está selecionado
         if(foiSelecionado == 1){

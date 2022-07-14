@@ -21,7 +21,7 @@ void carregar_textura(){
     stbi_set_flip_vertically_on_load(true); // inverte
 
     // pega os dados
-    unsigned char* entrada = stbi_load("textura.jpg",&largura,&altura,&canais,3);
+    unsigned char* entrada = stbi_load("textura.jpg",&largura,&altura,&canais,4);
 
     // verifica se foi carregado
     if(!entrada){
