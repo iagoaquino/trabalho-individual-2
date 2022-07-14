@@ -11,18 +11,16 @@
 #include "textura.cpp"
 #include "pecas.h"
 #include "entradas.cpp"
-
-float w = 1200,h = 600;
 using namespace std;
+float w = 1200,h = 600;
 glm::vec3 pos_jogador_branco(29,9.5,17);
 glm::vec3 pos_jogador_preto(-12,7.5,17);
 glm::vec3 pos_camera(-12,7.5,17);
 glm::vec3 look(0,0,0);
-glm::vec3 pos_luz(5,10,1);
+glm::vec3 pos_luz(5,-10,5);
 glm::vec3 ambiente(0.25f,0.25f,0.25f);
 glm::vec3 difusa(1.0f,1.0f,1.0f);
 glm::vec3 especular(0.5f,0.5f,0.5f);
-float expoente = 20;
 void movimento_animado(int v){
     glutTimerFunc(1000.0/FPS,movimento_animado,0);
     glutPostRedisplay();
@@ -100,17 +98,17 @@ void movimento_animado(int v){
         }
     }
 }
-glm::vec3 aplicar_luz(glm::vec3 normal,glm::vec3 pos,glm::vec3 cor_objeto){
+glm::vec3 aplicar_luz(glm::vec3 normal,glm::vec3 pos,glm::vec3 cor_objeto,glm::vec3 obj_ambiente,glm::vec3 obj_especular,int obj_expoente){
     glm::vec3 lp = normalize(pos_luz-pos);
     glm::vec3 vw = normalize(pos_camera-pos);
     glm::vec3 rf = 2*glm::dot(lp,normal)*normal -lp;
-    glm::vec3 ambiente_final = ambiente * cor_objeto;
+    glm::vec3 ambiente_final = ambiente * obj_ambiente;
     glm::vec3 difusa_final = (difusa * cor_objeto) * glm::dot(normal,lp);
     glm::vec3 especular_final;
     if(glm::dot(vw,rf) < 0){
         especular_final = glm::vec3(0.0f,0.0f,0.0f);
     }else{
-        especular_final = especular * glm::vec3(0.9f,0.9f,0.9f) * (float)pow(glm::dot(vw,rf),expoente);
+        especular_final = especular * obj_especular * (float)pow(glm::dot(vw,rf),obj_expoente);
     }
     glm::vec3 resultado_final = ambiente_final+difusa_final+especular_final;
     return resultado_final;
@@ -158,13 +156,13 @@ void desenhar_preto(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.torres[pos].obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_1 - 1].normal,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor1 = aplicar_luz(preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_1 - 1].normal,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_1-1].coord.x,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_1-1].coord.y,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_2 - 1].normal,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor2 = aplicar_luz(preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_2 - 1].normal,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_2-1].coord.x,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_2-1].coord.y,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_3 - 1].normal,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor3 = aplicar_luz(preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_3 - 1].normal,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_3-1].coord.x,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_3-1].coord.y,preto.torres[pos].obj->pontos[preto.torres[pos].obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -176,13 +174,13 @@ void desenhar_preto(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.cavalos[pos].obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_1 - 1].normal,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor1 = aplicar_luz(preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_1 - 1].normal,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_1-1].coord.x,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_1-1].coord.y,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_2 - 1].normal,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor2 = aplicar_luz(preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_2 - 1].normal,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_2-1].coord.x,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_2-1].coord.y,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_3 - 1].normal,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor3 = aplicar_luz(preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_3 - 1].normal,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_3-1].coord.x,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_3-1].coord.y,preto.cavalos[pos].obj->pontos[preto.cavalos[pos].obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -194,13 +192,13 @@ void desenhar_preto(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.bispos[pos].obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_1 - 1].normal,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor1 = aplicar_luz(preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_1 - 1].normal,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_1-1].coord.x,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_1-1].coord.y,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_2 - 1].normal,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor2 = aplicar_luz(preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_2 - 1].normal,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_2-1].coord.x,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_2-1].coord.y,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_3 - 1].normal,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor3 = aplicar_luz(preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_3 - 1].normal,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_3-1].coord.x,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_3-1].coord.y,preto.bispos[pos].obj->pontos[preto.bispos[pos].obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -212,13 +210,13 @@ void desenhar_preto(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.rainha.obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_1 - 1].normal,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor1 = aplicar_luz(preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_1 - 1].normal,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_1-1].coord.x,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_1-1].coord.y,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_2 - 1].normal,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor2 = aplicar_luz(preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_2 - 1].normal,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_2-1].coord.x,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_2-1].coord.y,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_3 - 1].normal,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor3 = aplicar_luz(preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_3 - 1].normal,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_3-1].coord.x,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_3-1].coord.y,preto.rainha.obj->pontos[preto.rainha.obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -230,13 +228,13 @@ void desenhar_preto(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.rei.obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_1 - 1].normal,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor1 = aplicar_luz(preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_1 - 1].normal,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_1-1].coord.x,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_1-1].coord.y,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_2 - 1].normal,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor2 = aplicar_luz(preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_2 - 1].normal,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_2-1].coord.x,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_2-1].coord.y,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_3 - 1].normal,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor3 = aplicar_luz(preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_3 - 1].normal,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_3-1].coord.x,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_3-1].coord.y,preto.rei.obj->pontos[preto.rei.obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -248,13 +246,13 @@ void desenhar_preto(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.peoes[pos].obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_1 - 1].normal,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor1 = aplicar_luz(preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_1 - 1].normal,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_1-1].coord.x,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_1-1].coord.y,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_2 - 1].normal,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor2 = aplicar_luz(preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_2 - 1].normal,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_2-1].coord.x,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_2-1].coord.y,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_3 - 1].normal,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3));
+               glm::vec3 cor3 = aplicar_luz(preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_3 - 1].normal,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(0.3,0.3,0.3),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_3-1].coord.x,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_3-1].coord.y,preto.peoes[pos].obj->pontos[preto.peoes[pos].obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -269,13 +267,13 @@ void desenhar_branco(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.torres[pos].obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_1 - 1].normal,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor1 = aplicar_luz(branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_1 - 1].normal,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_1-1].coord.x,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_1-1].coord.y,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_2 - 1].normal,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor2 = aplicar_luz(branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_2 - 1].normal,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_2-1].coord.x,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_2-1].coord.y,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_3 - 1].normal,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor3 = aplicar_luz(branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_3 - 1].normal,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_3-1].coord.x,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_3-1].coord.y,branco.torres[pos].obj->pontos[branco.torres[pos].obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -287,13 +285,13 @@ void desenhar_branco(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.cavalos[pos].obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_1 - 1].normal,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor1 = aplicar_luz(branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_1 - 1].normal,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_1-1].coord.x,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_1-1].coord.y,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_2 - 1].normal,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor2 = aplicar_luz(branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_2 - 1].normal,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_2-1].coord.x,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_2-1].coord.y,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_3 - 1].normal,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor3 = aplicar_luz(branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_3 - 1].normal,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_3-1].coord.x,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_3-1].coord.y,branco.cavalos[pos].obj->pontos[branco.cavalos[pos].obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -305,13 +303,13 @@ void desenhar_branco(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.bispos[pos].obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_1 - 1].normal,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor1 = aplicar_luz(branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_1 - 1].normal,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_1-1].coord.x,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_1-1].coord.y,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_2 - 1].normal,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor2 = aplicar_luz(branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_2 - 1].normal,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_2-1].coord.x,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_2-1].coord.y,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_3 - 1].normal,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor3 = aplicar_luz(branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_3 - 1].normal,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_3-1].coord.x,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_3-1].coord.y,branco.bispos[pos].obj->pontos[branco.bispos[pos].obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -323,13 +321,13 @@ void desenhar_branco(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.rainha.obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_1 - 1].normal,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor1 = aplicar_luz(branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_1 - 1].normal,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_1-1].coord.x,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_1-1].coord.y,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_2 - 1].normal,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor2 = aplicar_luz(branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_2 - 1].normal,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_2-1].coord.x,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_2-1].coord.y,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_3 - 1].normal,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor3 = aplicar_luz(branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_3 - 1].normal,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_3-1].coord.x,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_3-1].coord.y,branco.rainha.obj->pontos[branco.rainha.obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -341,13 +339,13 @@ void desenhar_branco(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.rei.obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_1 - 1].normal,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor1 = aplicar_luz(branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_1 - 1].normal,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_1-1].coord.x,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_1-1].coord.y,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_2 - 1].normal,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor2 = aplicar_luz(branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_2 - 1].normal,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_2-1].coord.x,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_2-1].coord.y,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_3 - 1].normal,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor3 = aplicar_luz(branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_3 - 1].normal,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_3-1].coord.x,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_3-1].coord.y,branco.rei.obj->pontos[branco.rei.obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -359,13 +357,13 @@ void desenhar_branco(int pos,int tipo){
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.peoes[pos].obj->quant_lados;i++){
-               glm::vec3 cor1 = aplicar_luz(branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_1 - 1].normal,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor1 = aplicar_luz(branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_1 - 1].normal,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_1 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor1.x,cor1.y,cor1.z);
                glVertex3f(branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_1-1].coord.x,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_1-1].coord.y,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_1-1].coord.z);
-               glm::vec3 cor2 = aplicar_luz(branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_2 - 1].normal,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor2 = aplicar_luz(branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_2 - 1].normal,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_2 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor2.x,cor2.y,cor2.z);
                glVertex3f(branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_2-1].coord.x,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_2-1].coord.y,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_2-1].coord.z);
-               glm::vec3 cor3 = aplicar_luz(branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_3 - 1].normal,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1));
+               glm::vec3 cor3 = aplicar_luz(branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_3 - 1].normal,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_3 - 1].coord,glm::vec3(1,1,1),glm::vec3(0.2,0.2,0.2),glm::vec3(0.8,0.8,0.8),20);
                glColor3f(cor3.x,cor3.y,cor3.z);
                glVertex3f(branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_3-1].coord.x,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_3-1].coord.y,branco.peoes[pos].obj->pontos[branco.peoes[pos].obj->faces[i].id_ponto_3-1].coord.z);
             }
@@ -389,19 +387,19 @@ void desenhar_tabuleiro(){
     glBindTexture(GL_TEXTURE_2D,id);
     for(int i = 0;i<64;i++){
         glBegin(GL_QUADS);
-            glm::vec3 cor1 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
+            glm::vec3 cor1 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]),glm::vec3(0.2,0.2,0.2),glm::vec3(0.7,0.7,0.7),1);
             glColor3f(cor1.x,cor1.y,cor1.z);
             glTexCoord2f(0,1);
             glVertex3f(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z);
-            glm::vec3 cor2 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
+            glm::vec3 cor2 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]),glm::vec3(0.2,0.2,0.2),glm::vec3(0.7,0.7,0.7),1);
             glColor3f(cor2.x,cor2.y,cor2.z);
             glTexCoord2f(1,1);
             glVertex3f(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y+1,tabuleiro[i].pos.z);
-            glm::vec3 cor3 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
+            glm::vec3 cor3 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]),glm::vec3(0.2,0.2,0.2),glm::vec3(0.7,0.7,0.7),1);
             glColor3f(cor3.x,cor3.y,cor3.z);
             glTexCoord2f(1,0);
             glVertex3f(tabuleiro[i].pos.x+1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z);
-            glm::vec3 cor4 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]));
+            glm::vec3 cor4 = aplicar_luz(glm::vec3(0,0,1),glm::vec3(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z),glm::vec3(tabuleiro[i].color[0],tabuleiro[i].color[1],tabuleiro[i].color[2]),glm::vec3(0.2,0.2,0.2),glm::vec3(0.7,0.7,0.7),1);
             glColor3f(cor4.x,cor4.y,cor4.z);
             glTexCoord2f(0,0);
             glVertex3f(tabuleiro[i].pos.x-1,tabuleiro[i].pos.y-1,tabuleiro[i].pos.z);
