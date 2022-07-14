@@ -5,29 +5,29 @@
 #define PECAS_H
 typedef struct torre{
     Objeto* obj;
-    glm::vec3 translate;
+    glm::mat4 translate;
 }Torre;
 typedef struct peao{
     Objeto* obj;
-    glm::vec3 translate;
+    glm::mat4 translate;
     int turnos;
 }Peao;
 typedef struct bispo{
     Objeto* obj;
-    glm::vec3 translate;
+    glm::mat4 translate;
 }Bispo;
 typedef struct cavalo{
     Objeto* obj;
-    glm::vec3 translate;
+    glm::mat4 translate;
 }Cavalo;
 typedef struct rei{
     Objeto* obj;
-    glm::vec3 translate;
+    glm::mat4 translate;
     int situacao;
 }Rei;
 typedef struct rainha{
     Objeto* obj;
-    glm::vec3 translate;
+    glm::mat4 translate;
 }Rainha;
 
 typedef struct jogador{

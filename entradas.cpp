@@ -13,7 +13,8 @@ using namespace std;
 Quadrado * selecionado;
 int ativar = 0;
 Jogador* movido;
-glm::vec3 mov;
+glm::mat4 matriz_identidade(1);
+glm::mat4 mov;
 glm::vec2 peca;
 float t;
 int turno = 2;
@@ -37,42 +38,42 @@ void movimentar(float x, float y){
     if(selecionado->jogador_ocupando == 2){
         if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 1){
             movido = &preto;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,1);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 2){
             movido = &preto;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,2);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 3){
             movido = &preto;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,3);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 4){
             movido = &preto;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,4);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 5){
             movido = &preto;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,5);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 6){
             movido = &preto;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,6);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 7){
             movido = &preto;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,7);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 8){
             movido = &preto;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,8);
             ativar = 1;
         }
@@ -80,42 +81,42 @@ void movimentar(float x, float y){
     if(selecionado->jogador_ocupando == 1){
         if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 1){
             movido = &branco;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,1);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 2){
             movido = &branco;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,2);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 3){
             movido = &branco;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,3);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 4){
             movido = &branco;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,4);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 5){
             movido = &branco;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,5);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 6){
             movido = &branco;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,6);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 7){
             movido = &branco;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,7);
             ativar = 1;
         }else if(selecionado->peca_ocupada.x == 6 && selecionado->peca_ocupada.y == 8){
             movido = &branco;
-            mov = glm::vec3(x,y,0);
+            mov = glm::translate(matriz_identidade,glm::vec3(x,y,0));
             peca = glm::vec2(6,8);
             ativar = 1;
         }

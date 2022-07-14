@@ -152,7 +152,7 @@ void mostrarTabuleiro(){
 void desenhar_preto(int pos,int tipo){
     if(tipo == 1){
         glPushMatrix();
-        glTranslatef(preto.torres[pos].translate.x,preto.torres[pos].translate.y,preto.torres[pos].translate.z);
+        glMultMatrixf(glm::value_ptr(preto.torres[pos].translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.torres[pos].obj->quant_lados;i++){
@@ -170,7 +170,7 @@ void desenhar_preto(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 2){
         glPushMatrix();
-        glTranslatef(preto.cavalos[pos].translate.x,preto.cavalos[pos].translate.y,preto.cavalos[pos].translate.z);
+        glMultMatrixf(glm::value_ptr(preto.cavalos[pos].translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.cavalos[pos].obj->quant_lados;i++){
@@ -188,7 +188,7 @@ void desenhar_preto(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 3){
         glPushMatrix();
-        glTranslatef(preto.bispos[pos].translate.x,preto.bispos[pos].translate.y,preto.bispos[pos].translate.z);
+        glMultMatrixf(glm::value_ptr(preto.bispos[pos].translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.bispos[pos].obj->quant_lados;i++){
@@ -206,7 +206,7 @@ void desenhar_preto(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 4){
         glPushMatrix();
-        glTranslatef(preto.rainha.translate.x,preto.rainha.translate.y,preto.rainha.translate.z);
+        glMultMatrixf(glm::value_ptr(preto.rainha.translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.rainha.obj->quant_lados;i++){
@@ -224,7 +224,7 @@ void desenhar_preto(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 5){
         glPushMatrix();
-        glTranslatef(preto.rei.translate.x,preto.rei.translate.y,preto.rei.translate.z);
+        glMultMatrixf(glm::value_ptr(preto.rei.translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.rei.obj->quant_lados;i++){
@@ -242,7 +242,7 @@ void desenhar_preto(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 6){
         glPushMatrix();
-        glTranslatef(preto.peoes[pos].translate.x,preto.peoes[pos].translate.y,preto.peoes[pos].translate.z);
+        glMultMatrixf(glm::value_ptr(preto.peoes[pos].translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < preto.peoes[pos].obj->quant_lados;i++){
@@ -263,7 +263,7 @@ void desenhar_preto(int pos,int tipo){
 void desenhar_branco(int pos,int tipo){
     if(tipo == 1){
         glPushMatrix();
-        glTranslatef(branco.torres[pos].translate.x,branco.torres[pos].translate.y,branco.torres[pos].translate.z);
+        glMultMatrixf(glm::value_ptr(branco.torres[pos].translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.torres[pos].obj->quant_lados;i++){
@@ -281,7 +281,7 @@ void desenhar_branco(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 2){
         glPushMatrix();
-        glTranslatef(branco.cavalos[pos].translate.x,branco.cavalos[pos].translate.y,branco.cavalos[pos].translate.z);
+        glMultMatrixf(glm::value_ptr(branco.cavalos[pos].translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.cavalos[pos].obj->quant_lados;i++){
@@ -299,7 +299,7 @@ void desenhar_branco(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 3){
         glPushMatrix();
-        glTranslatef(branco.bispos[pos].translate.x,branco.bispos[pos].translate.y,branco.bispos[pos].translate.z);
+        glMultMatrixf(glm::value_ptr(branco.bispos[pos].translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.bispos[pos].obj->quant_lados;i++){
@@ -317,7 +317,7 @@ void desenhar_branco(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 4){
         glPushMatrix();
-        glTranslatef(branco.rainha.translate.x,branco.rainha.translate.y,branco.rainha.translate.z);
+        glMultMatrixf(glm::value_ptr(branco.rainha.translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.rainha.obj->quant_lados;i++){
@@ -335,7 +335,7 @@ void desenhar_branco(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 5){
         glPushMatrix();
-        glTranslatef(branco.rei.translate.x,branco.rei.translate.y,branco.rei.translate.z);
+        glMultMatrixf(glm::value_ptr(branco.rei.translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.rei.obj->quant_lados;i++){
@@ -353,7 +353,7 @@ void desenhar_branco(int pos,int tipo){
         glPopMatrix();
     }else if(tipo == 6){
         glPushMatrix();
-        glTranslatef(branco.peoes[pos].translate.x,branco.peoes[pos].translate.y,branco.peoes[pos].translate.z);
+        glMultMatrixf(glm::value_ptr(branco.peoes[pos].translate));
         glScalef(3,3,3);
         glBegin(GL_TRIANGLES);
             for(int i = 0;i < branco.peoes[pos].obj->quant_lados;i++){
